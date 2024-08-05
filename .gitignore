@@ -1,0 +1,10 @@
+# misc
+ansible-navigator.log
+.DS_Store
+.ansible.cfg
+*.gz
+*artifact*.json
+**/roles/*
+!**/roles/requirements.yml
+.deployment_id
+.vscode

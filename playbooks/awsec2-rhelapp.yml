@@ -47,7 +47,7 @@
         tags:
           bluewave: true
       register: ec2_instances
-      
+
     - name: See the ec2 instance Output
       ansible.builtin.debug:
         msg: "{{ ec2_instances }}"

@@ -53,6 +53,7 @@
 
     - name: Tag RHEL1 instance
       amazon.aws.ec2_tag:
+        region: "{{ ec2_region }}"
         resource: "{{ item }}"
         tags:
           WebServer: "yes"

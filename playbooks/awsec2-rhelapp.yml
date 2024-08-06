@@ -23,11 +23,11 @@
         image_id: "{{ ec2_image_id }}"
         region: "{{ ec2_region }}"
 #        vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
-        security_group: "{{ ec2_security_group }}"
+        security_group: "{{ created_sg.group_id }}"
         network:
           assign_public_ip: true
   #        vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
-          security_group: "{{ ec2_security_group }}"
+          security_group: "{{ created_sg.group_id }}"
         wait: true
         count: 1
         tags:

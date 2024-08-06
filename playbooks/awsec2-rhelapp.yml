@@ -69,7 +69,7 @@
         tags:
           WebServer: "yes"
       with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
-      when: item[0].tags.Name == "rhel1"
+      when: item.tags.Name == "rhel1"
 
 - name: Configure and deploy web application on RHEL1
   hosts: launched

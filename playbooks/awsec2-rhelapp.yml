@@ -60,7 +60,7 @@
         delay: 60
         timeout: 320
         state: started
-      with_items: "{{ ec2_instances | map(attribute='instances') | flatten }}"
+      with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
 
     - name: Tag RHEL1 instance
       amazon.aws.ec2_tag:
@@ -68,7 +68,7 @@
         resource: "{{ item }}"
         tags:
           WebServer: "yes"
-      with_items: "{{ ec2_instances | map(attribute='instances') | flatten }}"
+      with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
       when: item[0].tags.Name == "rhel1"
 
 - name: Configure and deploy web application on RHEL1
@@ -107,5 +107,5 @@
     - name: Show the URL for RHEL1
       ansible.builtin.debug:
         msg: "Web Application is available at http://{{ item.public_dns_name }}"
-      with_items: "{{ ec2_instances | map(attribute='instances') | flatten }}"
+      with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
       when: item.tags.Name == "rhel1"

@@ -1,44 +1,44 @@
 ---
-- name: Create AWS resources for the AAP as a Service training events
+- name: Create AWS resources for the AAP Blue Wave Demo - SC5
   hosts: localhost
   connection: local
   gather_facts: false
   tasks:
 
-    - name: Create The AWS VPC "ansible-aas-vpc"
+    - name: Create The AWS VPC "sc5demo-vpc"
       amazon.aws.ec2_vpc_net:
-        name: "{{ ec2_name_prefix | default('ansible-aas-vpc') }}"
+        name: "{{ ec2_name_prefix | default('sc5demo-vpc') }}"
         cidr_block:
           - "{{ ec2_subnet | default('10.200.0.0/20') }}"
-        region: "{{ ec2_region | default('us-east-1') }}"
+        region: "{{ ec2_region | default('us-west-1') }}"
         tags:
-          Name: "ansible-aas-vpc"
+          Name: "sc5demo-vpc"
         tenancy: default
       register: created_vpc
       until: created_vpc is not failed
       retries: 5
 
-    - name: Create EC2 security group "ansible-aas-sg"
+    - name: Create EC2 security group "sc5demo-sg"
       amazon.aws.ec2_security_group:
-        name: "{{ ec2_name_prefix | default('ansible-aas-sg') }}"
-        region: "{{ ec2_region | default('us-east-1') }}"
+        name: "{{ ec2_name_prefix | default('sc5demo-sg') }}"
+        region: "{{ ec2_region | default('us-west-1') }}"
         description: AWS SG for the training events
         vpc_id: "{{ created_vpc.vpc.id }}"
         tags:
-          Name: "{{ ec2_name_prefix | default('ansible-aas-sg') }}"
+          Name: "{{ ec2_name_prefix | default('sc5demo-sg') }}"
         rules:
           - proto: tcp
             ports:
               - 22
             cidr_ip: 0.0.0.0/0
-          # - proto: tcp
-          #   ports:
-          #     - 80
-          #   cidr_ip: 0.0.0.0/0
-          # - proto: tcp
-          #   ports:
-          #     - 443
-          #   cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            ports:
+              - 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            ports:
+              - 443
+            cidr_ip: 0.0.0.0/0
           - proto: tcp
             ports:
               - 27199
@@ -47,57 +47,46 @@
       until: created_sg is not failed
       retries: 5
 
-    # The following 3 tasks are subdiving up the CIDR Block
-    - name: Create the PUBLIC subnet for ansible-aas-vpc
+    # The following 2 tasks are subdiving up the CIDR Block
+    - name: Create the PUBLIC subnet for sc5demo-vpc
       amazon.aws.ec2_vpc_subnet:
-        region: "{{ ec2_region | default('us-east-1') }}"
+        region: "{{ ec2_region | default('us-west-1') }}"
         vpc_id: "{{ created_vpc.vpc.id }}"
         cidr: "{{ ec2_cidr | default('10.200.0.0/24') }}"
         tags:
-          Name: "{{ ec2_name_prefix | default('public') }}"
+          Name: "{{ ec2_name_prefix | default('sc5demo-public-sn') }}"
       register: public_subnet
       until: public_subnet is not failed
       retries: 15
 
-    # - name: Create THE PRIVATE subnet for ansible-aas-vpc
+    # - name: Create THE PRIVATE subnet for sc5demo-vpc
     #   amazon.aws.ec2_vpc_subnet:
-    #     region: "{{ ec2_region | default('us-east-1') }}"
+    #     region: "{{ ec2_region | default('us-west-1') }}"
     #     vpc_id: "{{ created_vpc.vpc.id }}"
     #     cidr: "{{ ec2_cidr | default('10.200.2.0/23') }}"
     #     tags:
-    #       Name: "{{ ec2_name_prefix | default('private') }}"
+    #       Name: "{{ ec2_name_prefix | default('sc5demo-private-sn') }}"
     #   register: private_subnet
     #   until: private_subnet is not failed
     #   retries: 15
 
-    # - name: Create the EXECUTION-NODES subnet for ansible-aas-vpc
-    #   amazon.aws.ec2_vpc_subnet:
-    #     region: "{{ ec2_region | default('us-east-1') }}"
-    #     vpc_id: "{{ created_vpc.vpc.id }}"
-    #     cidr: "{{ ec2_cidr | default('10.200.1.0/24') }}"
-    #     tags:
-    #       Name: "{{ ec2_name_prefix | default('execution-nodes') }}"
-    #   register: execution_nodes_subnet
-    #   until: execution_nodes_subnet is not failed
-    #   retries: 15
-
     - name: Create the Internet Gateway for {{ created_vpc.vpc.id }}
       amazon.aws.ec2_vpc_igw:
-        region: "{{ ec2_region | default('us-east-1') }}"
+        region: "{{ ec2_region | default('us-west-1') }}"
         vpc_id: "{{ created_vpc.vpc.id }}"
         tags:
-          Name: "{{ ec2_name_prefix | default('ansible-aas-igw') }}"
+          Name: "{{ ec2_name_prefix | default('sc5demo-igw') }}"
       register: igw
       until: igw is not failed
       retries: 15
 
     # - name: Create the NAT Gateway and allocate a new EIP (if one doesn't exist)
     #   amazon.aws.ec2_vpc_nat_gateway:
-    #     region: "{{ ec2_region | default('us-east-1') }}"
+    #     region: "{{ ec2_region | default('us-west-1') }}"
     #     subnet_id: "{{ public_subnet.subnet.id }}"
     #     wait: true
     #     tags:
-    #       Name: "{{ ec2_name_prefix | default('ansible-aas-natgw') }}"
+    #       Name: "{{ ec2_name_prefix | default('sc5demo-natgw') }}"
     #     if_exist_do_not_create: true
     #   register: natgw
     #   until: natgw is not failed
@@ -105,7 +94,7 @@
 
     - name: VPC Public Subnet Route Table is present for {{ created_vpc.vpc.id }}
       amazon.aws.ec2_vpc_route_table:
-        region: "{{ ec2_region | default('us-east-1') }}"
+        region: "{{ ec2_region | default('us-west-1') }}"
         vpc_id: "{{ created_vpc.vpc.id }}"
         subnets:
           - "{{ public_subnet.subnet.id }}"
@@ -113,14 +102,14 @@
           - dest: 0.0.0.0/0
             gateway_id: "{{ igw.gateway_id }}"
         tags:
-          Name: "{{ ec2_name_prefix | default('public-rt') }}"
+          Name: "{{ ec2_name_prefix | default('sc5demo-public-rt') }}"
       register: public_routetable
       until: public_routetable is not failed
       retries: 5
 
     # - name: VPC Private Subnet Route Table is present for {{ created_vpc.vpc.id }}
     #   amazon.aws.ec2_vpc_route_table:
-    #     region: "{{ ec2_region | default('us-east-1') }}"
+    #     region: "{{ ec2_region | default('us-west-1') }}"
     #     vpc_id: "{{ created_vpc.vpc.id }}"
     #     subnets:
     #       - "{{ private_subnet.subnet.id }}"
@@ -129,7 +118,7 @@
     #       - dest: 0.0.0.0/0
     #         gateway_id: "{{ natgw.nat_gateway_id }}"
     #     tags:
-    #       Name: "{{ ec2_name_prefix | default('private-rt') }}"
+    #       Name: "{{ ec2_name_prefix | default('sc5demo-private-rt') }}"
     #   register: private_routetable
     #   until: private_routetable is not failed
     #   retries: 5

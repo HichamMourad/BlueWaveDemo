@@ -2,10 +2,11 @@
 # Create RHEL1, RHEL2, RHEL3.  DEPLOY WEB APPLICATION
 - name: Create RHEL EC2 instances and deploy a web application
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   vars:
     instance_type: t2.medium
     key_name: wave2024-demo
+    vpcsubnetid: sc5demo-public-sn
     security_group: launch-wizard-2
     image_id: ami-036d52dc86a04b099  # Replace with a valid RHEL AMI ID for the region chosen
     region: us-west-1
@@ -16,15 +17,19 @@
 
   tasks:
     - name: Launch EC2 instances
-      amazon.aws.ec2:
+      amazon.aws.ec2_instance:
         key_name: "{{ key_name }}"
         instance_type: "{{ instance_type }}"
         image_id: "{{ image_id }}"
         region: "{{ region }}"
-        group: "{{ security_group }}"
-        wait: yes
+        security_group: "{{ security_group }}"
+        network:
+          assign_public_ip: true
+          vpc_subnet_id: "{{ vpcsubnetid }}"
+          security_group: "{{ security_group }}"
+        wait: true
         count: 1
-        instance_tags:
+        tags:
           Name: "{{ item.name }}"
       with_items: "{{ instances }}"
       register: ec2_instances
@@ -54,7 +59,7 @@
 
 - name: Configure and deploy web application on RHEL1
   hosts: launched
-  become: yes
+  become: true
   tasks:
     - name: Install Apache on RHEL1
       ansible.builtin.dnf:
@@ -66,12 +71,13 @@
       ansible.builtin.service:
         name: httpd
         state: started
-        enabled: yes
+        enabled: true
       when: "'WebServer' in instance_tags"
 
     - name: Create a simple web page on RHEL1
       ansible.builtin.copy:
         dest: /var/www/html/index.html
+        mode: "0644"
         content: |
           <html>
           <body>

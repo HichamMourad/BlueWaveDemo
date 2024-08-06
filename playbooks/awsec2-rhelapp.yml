@@ -77,7 +77,7 @@
     - name: Tag the ec2 web server (rhel1) instance
       amazon.aws.ec2_tag:
         region: "{{ ec2_region }}"
-        resource: "{{ app_webserver.instance_id }}"
+        resource: "{{ app_webserver.instances.instance_id }}"
         tags:
           WebServer: "true"
 

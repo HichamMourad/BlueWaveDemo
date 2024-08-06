@@ -7,13 +7,13 @@
     instance_type: t2.medium
     key_name: wave2024-demo
     vpcsubnetid: sc5demo-public-sn
-    security_group: launch-wizard-2
+    security_group: sc5demo-sg
     image_id: ami-036d52dc86a04b099  # Replace with a valid RHEL AMI ID for the region chosen
     region: us-west-1
     instances:
-      - name: RHEL1
-      - name: RHEL2
-      - name: RHEL3
+      - name: rhel1
+      - name: rhel2
+      - name: rhel3
 
   tasks:
     - name: Launch EC2 instances
@@ -51,11 +51,11 @@
 
     - name: Tag RHEL1 instance
       amazon.aws.ec2_tag:
-        resource: "{{ item.id }}"
+        resource: "{{ item }}"
         tags:
           WebServer: "yes"
       with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
-      when: item.tags.Name == "RHEL1"
+      when: item.tags.Name == "rhel1"
 
 - name: Configure and deploy web application on RHEL1
   hosts: launched
@@ -94,4 +94,4 @@
       ansible.builtin.debug:
         msg: "Web Application is available at http://{{ item.public_dns_name }}"
       with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
-      when: item.tags.Name == "RHEL1"
+      when: item.tags.Name == "rhel1"

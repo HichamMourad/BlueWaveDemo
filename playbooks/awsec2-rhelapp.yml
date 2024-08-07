@@ -105,6 +105,7 @@
   tasks:
     - name: Grab the instance info for RHEL1
       amazon.aws.ec2_instance_info:
+      delegate_to: localhost
         region: "{{ ec2_region }}"
         filters:
           instance-state-name: running

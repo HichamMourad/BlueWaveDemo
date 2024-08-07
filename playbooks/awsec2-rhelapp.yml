@@ -37,15 +37,15 @@
         vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
         security_group: "{{ ec2_security_group }}"
         network:
-          assign_public_ip: true
+          assign_public_ip: True
           subnet_id: "{{ ec2_vpc_subnet_id }}"
-        wait: true
+        wait: True
         count: 1
         filters:
           instance-state-name: running
-          "tag:bluewave": true
+          "tag:bluewave": True
         tags:
-          bluewave: true
+          bluewave: True
           Name: "{{ item.name }}"
       with_items: "{{ ec2_names }}"
       register: ec2_instances
@@ -79,7 +79,7 @@
         region: "{{ ec2_region }}"
         resource: "{{ app_webserver.instances[0].instance_id }}"
         tags:
-          WebServer: "true"
+          WebServer: "True"
 
     - name: Add the web server (rhel1) to the host group named appwebserver
       ansible.builtin.add_host:
@@ -112,22 +112,22 @@
       delegate_to: localhost
 
     - name: Install Apache on RHEL1
-      become: true
+      become: True
       ansible.builtin.dnf:
         name: httpd
         state: present
 #      when: "'WebServer' in instance_tags"
 
     - name: Start and enable Apache on RHEL1
-      become: true
+      become: True
       ansible.builtin.service:
         name: httpd
         state: started
-        enabled: true
+        enabled: True
 #      when: "'WebServer' in instance_tags"
 
     - name: Create a simple web page on RHEL1
-      become: true
+      become: True
       ansible.builtin.copy:
         dest: /var/www/html/index.html
         mode: "0644"

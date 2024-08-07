@@ -113,12 +113,14 @@
       delegate_to: localhost
 
     - name: Install Apache on RHEL1
+      become: true
       ansible.builtin.dnf:
         name: httpd
         state: present
 #      when: "'WebServer' in instance_tags"
 
     - name: Start and enable Apache on RHEL1
+      become: true
       ansible.builtin.service:
         name: httpd
         state: started
@@ -126,6 +128,7 @@
 #      when: "'WebServer' in instance_tags"
 
     - name: Create a simple web page on RHEL1
+      become: true
       ansible.builtin.copy:
         dest: /var/www/html/index.html
         mode: "0644"

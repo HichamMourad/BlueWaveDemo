@@ -133,4 +133,4 @@
       ansible.builtin.debug:
         msg:
           - "Web Application is available at the following URL"
-          - "http://{{ rhel1app_webserver.instances.public_dns_name }}"
+          - "http://{{ rhel1app_webserver.instances[0].public_dns_name }}"

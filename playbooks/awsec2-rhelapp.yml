@@ -107,7 +107,7 @@
         filters:
           instance-state-name: running
           "tag:Name": "rhel1"
-      register: app_webserver
+      register: rhel1app_webserver
 
     - name: Install Apache on RHEL1
       ansible.builtin.dnf:
@@ -139,5 +139,5 @@
       ansible.builtin.debug:
         msg: "Web Application is available at http://{{ item.public_dns_name }}"
 #      with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
-      with_items: "{{ app_webserver.instances[0] }}"
+      with_items: "{{ rhel1app_webserver.instances[0] }}"
 #      when: item.tags.Name == "rhel1"

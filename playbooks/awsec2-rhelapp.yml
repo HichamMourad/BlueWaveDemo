@@ -49,6 +49,10 @@
           bluewave: "hichamrocks"
       register: ec2_instances
 
+    - name: Print out ec2_instances
+      debug:
+        msg: "{{ ec2_instances }}"
+
     - name: Tag ec2 RHEL instance (rhel1, rhel2, rhel3)
       amazon.aws.ec2_tag:
         region: "{{ ec2_region }}"

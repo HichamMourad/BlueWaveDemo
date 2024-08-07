@@ -41,7 +41,7 @@
           assign_public_ip: true
           subnet_id: "{{ ec2_vpc_subnet_id }}"
         wait: true
-        count: "{{ ec2_names | length }}"
+        exact_count: "{{ ec2_names | length }}"
         filters:
           instance-state-name: running
           "tag:bluewave": "hichamrocks"

@@ -54,8 +54,10 @@
         region: "{{ ec2_region }}"
         resource: "{{ item.instance_id }}"
         tags:
-          Name: "rhel{{ ansible_loop.index }}"
+          Name: "rhel{{ my_idx + 1 }}"
       loop: "{{ ec2_instances.instances }}"
+      loop_control:
+        index_var: my_idx
 
     - name: Grab the instance info for RHEL1
       amazon.aws.ec2_instance_info:

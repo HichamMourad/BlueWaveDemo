@@ -86,7 +86,7 @@
         hostname: "{{ item.public_dns_name }}"
         groupname: appwebserver
 #      with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
-      with_items: "{{ app_webserver | map(attribute='instances') | flatten }}"
+      with_items: "{{ app_webserver.instances }}"
 
     - name: Wait for the SSH service to come up on all new ec2 instances
       ansible.builtin.wait_for:

@@ -97,21 +97,22 @@
       with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
 
 - name: PLAY2...Configure and deploy web application on RHEL1
-  hosts: launched
+#  hosts: launched
+  hosts: "{{ app_webserver.instances[0].public_dns_name }}"
   become: true
   tasks:
     - name: Install Apache on RHEL1
       ansible.builtin.dnf:
         name: httpd
         state: present
-      when: "'WebServer' in instance_tags"
+#      when: "'WebServer' in instance_tags"
 
     - name: Start and enable Apache on RHEL1
       ansible.builtin.service:
         name: httpd
         state: started
         enabled: true
-      when: "'WebServer' in instance_tags"
+#      when: "'WebServer' in instance_tags"
 
     - name: Create a simple web page on RHEL1
       ansible.builtin.copy:
@@ -124,7 +125,7 @@
           <h1 style="color:blue;">Blue wave demo!</h1>
           </body>
           </html>
-      when: "'WebServer' in instance_tags"
+#      when: "'WebServer' in instance_tags"
 
 - name: PLAY3...Output the web application URL
   hosts: localhost
@@ -132,7 +133,8 @@
     - name: Show the URL for RHEL1
       ansible.builtin.debug:
         msg: "Web Application is available at http://{{ item.public_dns_name }}"
-      with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
+#      with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
+      with_items: "{{ app_webserver.instances[0] }}"
       when: item.tags.Name == "rhel1"
 
     # - name: Tag ec2 RHEL instance

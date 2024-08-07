@@ -99,7 +99,7 @@
 
 - name: PLAY2...Configure and deploy web application on RHEL1
   hosts: appwebserver
-  become: true
+  gather_facts: false
   vars:
     ec2_region: us-west-1
   tasks:

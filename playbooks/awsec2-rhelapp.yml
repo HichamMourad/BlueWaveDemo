@@ -49,10 +49,6 @@
           bluewave: "hichamrocks"
       register: ec2_instances
 
-    - name: Print out ec2_instances
-      debug:
-        msg: "{{ ec2_instances }}"
-
     - name: Tag ec2 RHEL instance (rhel1, rhel2, rhel3)
       amazon.aws.ec2_tag:
         region: "{{ ec2_region }}"
@@ -70,10 +66,6 @@
           instance-state-name: running
           "tag:Name": "rhel1"
       register: app_webserver
-
-    - name: See the app webserver Output
-      ansible.builtin.debug:
-        msg: "{{ app_webserver }}"
 
     - name: Tag the ec2 web server (rhel1) instance
       amazon.aws.ec2_tag:
@@ -116,7 +108,6 @@
       ansible.builtin.dnf:
         name: httpd
         state: present
-#      when: "'WebServer' in instance_tags"
 
     - name: Start and enable Apache on RHEL1
       become: true
@@ -124,7 +115,6 @@
         name: httpd
         state: started
         enabled: true
-#      when: "'WebServer' in instance_tags"
 
     - name: Create a simple web page on RHEL1
       become: true
@@ -138,11 +128,10 @@
           <h1 style="color:blue;">Blue wave demo!</h1>
           </body>
           </html>
-#      when: "'WebServer' in instance_tags"
 
     - name: Show the URL for RHEL1
       ansible.builtin.debug:
-        msg: "Web Application is available at http://{{ item.public_dns_name }}"
-#      with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
+        msg:
+          - "Web Application is available at the following URL"
+          - "http://{{ item.public_dns_name }}"
       with_items: "{{ rhel1app_webserver.instances }}"
-#      when: item.tags.Name == "rhel1"

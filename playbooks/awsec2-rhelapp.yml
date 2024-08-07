@@ -100,6 +100,8 @@
 - name: PLAY2...Configure and deploy web application on RHEL1
   hosts: appwebserver
   become: true
+  vars:
+    ec2_region: us-west-1
   tasks:
     - name: Grab the instance info for RHEL1
       amazon.aws.ec2_instance_info:
@@ -139,5 +141,5 @@
       ansible.builtin.debug:
         msg: "Web Application is available at http://{{ item.public_dns_name }}"
 #      with_items: "{{ ec2_instances.results | map(attribute='instances') | flatten }}"
-      with_items: "{{ rhel1app_webserver.instances[0] }}"
+      with_items: "{{ rhel1app_webserver.instances }}"
 #      when: item.tags.Name == "rhel1"

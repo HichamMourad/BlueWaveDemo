@@ -121,20 +121,18 @@
       ansible.builtin.copy:
         dest: /var/www/html/index.html
         mode: "0644"
-          content: |
-            <!doctype html>
-            <title>Globo Financial Servicesk</title>
-            <body style="background: {{ color }};"></body>
-            <div style="color: #e4e4e4;
-                text-align:  center;
-                height: 90px;
-                vertical-align:  middle;">
+        content: |
+          <!doctype html>
+          <title>Globo Financial Servicesk</title>
+          <body style="background: {{ color }};"></body>
+          <div style="color: #e4e4e4;
+              text-align:  center;
+              height: 90px;
+              vertical-align:  middle;">
 
-            <img src="tps://raw.githubusercontent.com/HichamMourad/BlueWaveDemo/playbooks/globo.png" alt="Centered GIF"></img>
-            </div>
-            <html>
-
-
+          <img src="tps://raw.githubusercontent.com/HichamMourad/BlueWaveDemo/playbooks/globo.png" alt="Centered GIF"></img>
+          </div>
+          <html>
 
         # content: |
         #   <html>

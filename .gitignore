@@ -1,9 +1,8 @@
 # misc
-ansible-navigator.log
 .DS_Store
 .ansible.cfg
 *.gz
-*artifact*.json
-!**/roles/requirements.yml
-.deployment_id
+artifacts
+*.log
+settings.json
 .vscode

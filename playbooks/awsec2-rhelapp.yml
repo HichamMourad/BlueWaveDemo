@@ -121,13 +121,27 @@
       ansible.builtin.copy:
         dest: /var/www/html/index.html
         mode: "0644"
-        content: |
-          <html>
-          <body>
-          <h1 style="color:red;">Ansible Automation Platform Deployed Web Server</h1>
-          <h1 style="color:blue;">Blue wave demo!</h1>
-          </body>
-          </html>
+          content: |
+            <!doctype html>
+            <title>Globo Financial Servicesk</title>
+            <body style="background: {{ color }};"></body>
+            <div style="color: #e4e4e4;
+                text-align:  center;
+                height: 90px;
+                vertical-align:  middle;">
+
+            <img src="tps://raw.githubusercontent.com/HichamMourad/BlueWaveDemo/playbooks/globo.png" alt="Centered GIF"></img>
+            </div>
+
+
+
+        # content: |
+        #   <html>
+        #   <body>
+        #   <h1 style="color:red;">Ansible Automation Platform Deployed Web Server</h1>
+        #   <h1 style="color:blue;">Blue wave demo!</h1>
+        #   </body>
+        #   </html>
 
     - name: Show the URL for RHEL1
       ansible.builtin.debug:

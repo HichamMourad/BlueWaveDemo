@@ -124,7 +124,7 @@
         content: |
           <!doctype html>
           <title>Globo Financial Servicesk</title>
-          <body style="background: {{ color }};"></body>
+          <body style="background:blue;"></body>
           <div style="color: #e4e4e4;
               text-align:  center;
               height: 90px;

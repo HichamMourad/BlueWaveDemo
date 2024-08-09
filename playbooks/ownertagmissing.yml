@@ -30,9 +30,9 @@
           - "Host_AWS_ID: {{ item.instance_id }}"
           - "COMPLIANCE STATUS: {{ item.tags['owner'] | default('Severty: MEDIUM. OUT OF COMPLIANCE, OWNER tag is MISSING') }}"
       loop: "{{ ec2_instance_info.instances }}"
-      # loop_control:
-      #   label: "EC2 info and associated tags"
-      when: ec2_instance_info.instances.tags['owner'] is not defined
+      loop_control:
+        label: "EC2 info and associated tags"
+      when: ec2_instance_info.instances.tags['owner'] is defined
 
     - name: Display Compliance of the OWNER tag.  This tag is MANDATORY
       ansible.builtin.debug:
@@ -41,6 +41,6 @@
           - "Host_AWS_ID: {{ item.instance_id }}"
           - "COMPLIANCE STATUS: Compliant. Owner tag value is: {{ item.tags['owner'] }}"
       loop: "{{ ec2_instance_info.instances }}"
-      # loop_control:
-      #   label: "EC2 info and associated tags"
-      when: ec2_instance_info.instances.tags['owner'] is defined
+      loop_control:
+        label: "EC2 info and associated tags"
+      when: ec2_instance_info.instances.tags['owner'] is not defined

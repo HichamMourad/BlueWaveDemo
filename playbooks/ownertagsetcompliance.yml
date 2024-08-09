@@ -1,0 +1,46 @@
+---
+- name: Grab the tags on the VPC and EC2 instances and display them
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    ec2_region: "{{ your_region | default('us-west-1') }}"
+    owner_name: "{{ owner_survey }}"
+    add_remove: "{{ add_remove_survey }}"
+
+  tasks:
+
+    - name: Retrieve the VPC information
+      amazon.aws.ec2_vpc_net_info:
+        region: "{{ ec2_region }}"
+        filters:
+          state: available
+          "tag:Name": "sc5demo-vpc"
+      register: vpc_info
+
+    - name: Retrieve info for the EC2 instances
+      amazon.aws.ec2_instance_info:
+        region: "{{ ec2_region }}"
+        filters:
+          instance-state-name: running
+          "tag:Name": "{{ HOSTS }}"
+      register: ec2_instance_info
+
+    - name: Add or Remove the owner tag
+      amazon.aws.ec2_tag:
+        region: "{{ ec2_region }}"
+        resource: "{{ item.instance_id }}"
+        state: "{{ add_remove }}"
+        tags:
+          owner: "{{ owner_name }}"
+      loop: "{{ ec2_instance_info.instances }}"
+
+    - name: Display Compliance of the OWNER tag.  This tag is MANDATORY
+      ansible.builtin.debug:
+        msg:
+          - "Hostname: {{ item.tags['Name'] }}"
+          - "Host_AWS_ID: {{ item.instance_id }}"
+          - "COMPLIANCE STATUS: {{ item.tags['owner'] | default('Severty: MEDIUM. OUT OF COMPLIANCE, OWNER tag is MISSING') }}"
+      loop: "{{ ec2_instance_info.instances }}"
+      loop_control:
+        label: "EC2 info and associated tags"

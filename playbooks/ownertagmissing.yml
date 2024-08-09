@@ -33,7 +33,7 @@
       loop: "{{ ec2_instance_info.instances }}"
       loop_control:
         label: "EC2 info and associated tags"
-      when: ec2_instance_info.instances.tags['owner'] is not defined
+      when: ec2_instance_info.instances.tags['owner'] is undefined
 
     - name: Display Compliance of the OWNER tag.  This tag is MANDATORY
       ansible.builtin.debug:

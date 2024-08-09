@@ -35,6 +35,14 @@
           owner: "{{ owner_name }}"
       loop: "{{ ec2_instance_info.instances }}"
 
+    - name: Retrieve info for the EC2 instances
+      amazon.aws.ec2_instance_info:
+        region: "{{ ec2_region }}"
+        filters:
+          instance-state-name: running
+          "tag:Name": "{{ HOSTS }}"
+      register: ec2_instance_info
+
     - name: Display Compliance of the OWNER tag.  This tag is MANDATORY
       ansible.builtin.debug:
         msg:

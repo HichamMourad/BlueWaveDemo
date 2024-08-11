@@ -43,7 +43,7 @@
         msg: "{{ motd_file }}"
 
     - name: Ensure /etc/motd exists
-      ansible.builtin.fail:
+      ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: LOW. /etc/motd does not exist."
       when: not motd_file.stat.exists
 

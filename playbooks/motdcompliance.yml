@@ -38,10 +38,6 @@
         path: /etc/motd
       register: motd_file
 
-    - name: TEMPORARY.  PRINT motd_file Output
-      ansible.builtin.debug:
-        msg: "{{ motd_file }}"
-
     - name: Ensure /etc/motd exists
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: LOW. /etc/motd does not exist."

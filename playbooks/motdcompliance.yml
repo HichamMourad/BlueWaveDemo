@@ -5,8 +5,6 @@
   gather_facts: false
   vars:
     ec2_region: "{{ your_region | default('us-west-1') }}"
-    owner_name: "{{ owner_survey }}"
-    add_remove: "{{ add_remove_survey }}"
 
   tasks:
     - name: Retrieve the VPC information
@@ -29,9 +27,7 @@
   hosts: "{{ HOSTS }}"
   gather_facts: false
   become: true
-  # vars:
-  #   owner_name: "{{ motd_survey }}"
-  #   add_remove: "{{ add_remove_survey }}"
+
   tasks:
     - name: Check if /etc/motd file exists
       ansible.builtin.stat:

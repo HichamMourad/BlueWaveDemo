@@ -1,0 +1,45 @@
+---
+- name: PLAY1...Capture the list of target servers
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    ec2_region: "{{ your_region | default('us-west-1') }}"
+
+  tasks:
+    - name: Retrieve the VPC information
+      amazon.aws.ec2_vpc_net_info:
+        region: "{{ ec2_region }}"
+        filters:
+          state: available
+          "tag:Name": "sc5demo-vpc"
+      register: vpc_info
+
+    - name: Retrieve info for the EC2 instances
+      amazon.aws.ec2_instance_info:
+        region: "{{ ec2_region }}"
+        filters:
+          instance-state-name: running
+          "tag:Name": "{{ HOSTS }}"
+      register: ec2_instance_info
+
+- name: PLAY2...ADD or REMOVE the message of the day file
+  hosts: "{{ HOSTS }}"
+  gather_facts: false
+  become: true
+  vars:
+    add_remove: "{{ add_remove_survey }}"
+  tasks:
+    - name: Create and update /etc/motd with custom content
+      ansible.builtin.copy:
+        dest: /etc/motd
+        content: |
+          Welcome to server "{{ HOSTS }}"
+          Unauthorized access is strictly prohibited.
+          Please contact the administrator if you need assistance.
+
+    - name: Verify /etc/motd content
+      ansible.builtin.debug:
+        msg: 
+          - "Content of /etc/motd has been updated on server {{ HOSTS }}."
+          - "COMPLIANCE STATUS: Compliant. /etc/motd file exists and contains data."

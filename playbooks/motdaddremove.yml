@@ -39,6 +39,9 @@
     - name: Create and update /etc/motd with custom content
       ansible.builtin.copy:
         dest: /etc/motd
+        owner: root
+        group: root
+        mode: '0644'
         content: |
           Welcome to server "{{ HOSTS }}"
           Unauthorized access is strictly prohibited.
@@ -53,4 +56,4 @@
     - name: Output Non-Compliant compliance status
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: LOW. /etc/motd does not exist."
-      when: add_remove != "absent"
+      when: add_remove == "absent"

@@ -43,9 +43,11 @@
         group: root
         mode: '0644'
         content: |
-          Welcome to server "{{ HOSTS }}"
+          *********************************************************
+          Welcome to Red Hat Enterprise Linux
           Unauthorized access is strictly prohibited.
           Please contact the administrator if you need assistance.
+          *********************************************************
       when: add_remove == "touch"
 
     - name: Output Compliant compliance status

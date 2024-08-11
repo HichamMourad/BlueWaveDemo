@@ -134,14 +134,6 @@
           </div>
           <html>
 
-        # content: |
-        #   <html>
-        #   <body>
-        #   <h1 style="color:red;">Ansible Automation Platform Deployed Web Server</h1>
-        #   <h1 style="color:blue;">Blue wave demo!</h1>
-        #   </body>
-        #   </html>
-
     - name: Show the URL for RHEL1
       ansible.builtin.debug:
         msg:

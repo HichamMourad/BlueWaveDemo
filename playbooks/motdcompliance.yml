@@ -34,25 +34,25 @@
   #   add_remove: "{{ add_remove_survey }}"
   tasks:
       - name: Check if /etc/motd file exists
-        become: true
         ansible.builtin.stat:
           path: /etc/motd
         register: motd_file
 
+      - name: TEMPORARY.  PRINT motd_file Output
+        ansible.builtin.debug:
+          msg: "{{ motd_file }}"
+
       - name: Ensure /etc/motd exists
-        become: true
         ansible.builtin.fail:
           msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severty: LOW. /etc/motd does not exist on the host."
         when: not motd_file.stat.exists
 
       - name: Check if /etc/motd file contains data
-        become: true
         ansible.builtin.fail:
           msg: "/etc/motd exists but is empty."
         when: motd_file.stat.exists and motd_file.stat.size == 0
 
       - name: Output success message if /etc/motd exists and contains data
-        become: true
         ansible.builtin.debug:
           msg: "COMPLIANCE STATUS: Compliant. /etc/motd file exists and contains data."
         when: motd_file.stat.exists and motd_file.stat.size > 0

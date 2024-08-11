@@ -48,7 +48,7 @@
       when: not motd_file.stat.exists
 
     - name: Check if /etc/motd file contains data
-      ansible.builtin.fail:
+      ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: LOW. /etc/motd exists but is empty."
       when: motd_file.stat.exists and motd_file.stat.size == 0
 

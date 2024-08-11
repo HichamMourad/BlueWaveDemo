@@ -28,7 +28,7 @@
         msg:
           - "Hostname: {{ item.tags['Name'] }}"
           - "ec2 Instance ID: {{ item.instance_id }}"
-          - "Severty: MEDIUM. OUT OF COMPLIANCE, owner tag is MISSING"
+          - "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severty: MEDIUM. owner tag is MISSING"
       when: item.tags['owner'] is undefined
       loop: "{{ ec2_instance_info.instances }}"
       loop_control:

@@ -34,7 +34,7 @@
     - name: Add or Remove /etc/motd depending on the add_remove_survey value
       ansible.builtin.file:
         path: /etc/motd
-        state: add_remove
+        state: "{{ add_remove }}"
 
     - name: Create and update /etc/motd with custom content
       ansible.builtin.copy:
@@ -43,14 +43,14 @@
           Welcome to server "{{ HOSTS }}"
           Unauthorized access is strictly prohibited.
           Please contact the administrator if you need assistance.
-      when: add_remove == "present"
+      when: add_remove == "touch"
 
     - name: Output Compliant compliance status
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: Compliant. /etc/motd file exists and contains data."
-      when: add_remove == "present" 
+      when: add_remove == "touch" 
 
     - name: Output Non-Compliant compliance status
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: LOW. /etc/motd does not exist."
-      when: add_remove != "present"
+      when: add_remove != "absent"

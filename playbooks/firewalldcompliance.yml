@@ -37,9 +37,9 @@
     - name: Check if FIREWALLD Service is enabled and running
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: Compliant. FIREWALLD Service is enabled and running" 
-      when: ansible_facts.services is defined and ansible_facts.services[firewalld + '.service'][state] == "running"
+      when: ansible_facts.services is defined and ansible_facts.services.firewalld.state == "running"
  
     - name: Check if FIREWALLD Service is NOT enabled or NOT running
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: HIGH. FIREWALLD Service is NOT enabled and NOT running"
-      when: ansible_facts.services.firewalld.service is undefined or ansible_facts.services[firewalld + '.service'][state] != "running"
+      when: ansible_facts.services.firewalld.service is undefined or ansible_facts.services.firewalld.state != "running"

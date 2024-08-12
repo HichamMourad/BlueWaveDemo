@@ -44,9 +44,9 @@
         exact_count: "{{ ec2_names | length }}"
         filters:
           instance-state-name: running
-          "tag:bluewave": "hichamrocks"
+          "tag:bluewave": "true"
         tags:
-          bluewave: "hichamrocks"
+          bluewave: "true"
       register: ec2_instances
 
     - name: Tag ec2 RHEL instance (rhel1, rhel2, rhel3)

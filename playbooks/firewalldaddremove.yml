@@ -46,7 +46,13 @@
         name: firewalld
         enabled: true
         state: started
-      when: ansible_facts.services.['firewalld.service'] is undefined and add_remove == "present" 
+      when: ansible_facts.services.firewalld.service is undefined and add_remove == "present"
+
+    - name: REMOVE the FIREWALLD service package
+      ansible.builtin.dnf:
+        name: firewalld
+        state: "{{ add_remove }}"
+      when: ansible_facts.services.firewalld.service is defined and add_remove == "absent"
 
     - name: Output Compliant compliance status
       ansible.builtin.debug:

@@ -35,8 +35,9 @@
     - name: Gather service facts
       ansible.builtin.service_facts:
 
+    - name: Block to ADD and enable  firewalld
     block: 
-      - name: Add or Remove the FIREWALLD service package
+      - name: Add the FIREWALLD service package
         ansible.builtin.dnf:
           name: firewalld
           state: "{{ add_remove }}"

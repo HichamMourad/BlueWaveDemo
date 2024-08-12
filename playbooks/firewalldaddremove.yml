@@ -39,11 +39,21 @@
       ansible.builtin.dnf:
         name: firewalld
         state: "{{ add_remove }}"
-      when: "'firewalld.service' not in ansible_facts.services"
+      when: ansible_facts.services.firewalld.service is undefined and "{{ add_remove }}" == present
 
     - name: Enable the FIREWALLD service
       ansible.builtin.service:
         name: firewalld
         enabled: true
         state: started
-      when: "'firewalld.service' not in ansible_facts.services"  
+      when: ansible_facts.services.firewalld.service is undefined and "{{ add_remove }}" == present 
+
+    - name: Output Compliant compliance status
+      ansible.builtin.debug:
+        msg: "COMPLIANCE STATUS: Compliant. FIREWALLD is enabled and running."
+      when: add_remove == "present" 
+
+    - name: Output Non-Compliant compliance status
+      ansible.builtin.debug:
+        msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: HIGH. FIREWALLD is NOT present or running."
+      when: add_remove == "absent"

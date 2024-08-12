@@ -37,10 +37,9 @@
     - name: Check if FIREWALLD Service is enabled and running
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: Compliant. FIREWALLD Service is enabled and running"
-      when: service_name + '.service' in ansible_facts.services and ansible_facts.services.["{{ service_name }}.service"].status == enabled and ansible_facts.services.["{{ service_name }}.service"].state == running 
+      when: service_name + '.service' in ansible_facts.services and ansible_facts.services.[service_name + '.service'].status == 'enabled' and ansible_facts.services.[service_name + '.service'].state == 'running' 
       
     - name: Check if FIREWALLD Service is NOT enabled or NOT running
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: HIGHT. FIREWALLD Service is NOT enabled and running"
-      when: service_name + '.service' not in ansible_facts.services or ansible_facts.services.["{{ service_name }}.service"].status != enabled or ansible_facts.services.["{{ service_name }}.service"].state != running 
- 
+      when: service_name + '.service' not in ansible_facts.services or ansible_facts.services.[service_name + '.service'].status != 'enabled' or ansible_facts.services.[service_name + '.service'].state != 'running' 

@@ -24,7 +24,7 @@
       register: ec2_instance_info
 
 - name: PLAY2...Turn ON / OFF the SELinux Policy
-  hosts: "{{ HOSTS }}"
+  hosts: "{{ HOSTS | default('none')}}"
   gather_facts: false
   become: true
   vars:
@@ -39,13 +39,13 @@
     - name: Disable SELinux
       ansible.posix.selinux:
         state: disabled
-      when: selinux_status.stdout != "Disabled" and add_remove == "disable"
+      when: selinux_status.stdout != "Disabled" and add_remove == "disabled"
 
     - name: Enable SELinux
       ansible.posix.selinux:
         policy: targeted
-        state: enabled
-      when: selinux_status.stdout != "Enabled" and add_remove == "enable"
+        state: enforcing
+      when: selinux_status.stdout != "Enabled" and add_remove == "enforcing"
 
     - name: Report compliance
       ansible.builtin.debug:

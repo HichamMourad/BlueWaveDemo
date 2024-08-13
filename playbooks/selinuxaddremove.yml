@@ -38,7 +38,6 @@
 
     - name: Disable SELinux
       ansible.posix.selinux:
-        policy: targeted
         state: disabled
       when: selinux_status.stdout != "Disabled" and add_remove == "disable"
 

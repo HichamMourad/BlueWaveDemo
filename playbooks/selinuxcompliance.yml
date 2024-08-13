@@ -37,9 +37,9 @@
     - name: Report compliance
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: Compliant. The server is in compliance with the SELinux policy."
-      when: selinux_status.stdout == "enforcing"
+      when: selinux_status.stdout == "Enforcing"
 
     - name: Report non-compliance
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: HIGH. The server is out of compliance with the SELinux policy."
-      when: selinux_status.stdout == "disabled" or selinux_status.stdout == "permissive"
+      when: selinux_status.stdout == "Disabled" or selinux_status.stdout == "Permissive"

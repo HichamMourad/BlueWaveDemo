@@ -47,6 +47,10 @@
         state: enforcing
       when: selinux_status.stdout != "Enabled" and add_remove == "enforcing"
 
+    - name: Check if selinux is enabled
+      ansible.builtin.command: getenforce
+      register: selinux_status
+
     - name: Report compliance
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: Compliant. The server is in compliance with the SELinux policy."

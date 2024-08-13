@@ -59,4 +59,4 @@
     - name: Report non-compliance
       ansible.builtin.debug:
         msg: "COMPLIANCE STATUS: OUT OF COMPLIANCE. Severity: HIGH. The server is out of compliance with the SELinux policy."
-      when: selinux_status.stdout == "Disabled" or selinux_status.stdout == "Dermissive"
+      when: selinux_status.stdout == "Disabled" or selinux_status.stdout == "Permissive"

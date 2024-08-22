@@ -32,8 +32,8 @@
 
   tasks:
 
-    - name: Gather service facts
-      ansible.builtin.service_facts:
+    # - name: Gather service facts
+    #   ansible.builtin.service_facts:
 
     - name: Modify (Add/Remove) the FIREWALLD service package
       ansible.builtin.dnf:
@@ -46,7 +46,6 @@
         enabled: true
         state: started
       when: add_remove == "present"
-
 
     - name: Output Compliant compliance status
       ansible.builtin.debug:

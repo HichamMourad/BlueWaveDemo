@@ -35,11 +35,10 @@
     - name: Gather service facts
       ansible.builtin.service_facts:
 
-    - name: Add the FIREWALLD service package
+    - name: Modify (Add/Remove) the FIREWALLD service package
       ansible.builtin.dnf:
         name: firewalld
         state: "{{ add_remove }}"
-      when: ansible_facts['services']['firewalld.service'] is undefined and add_remove == "present"
 
     - name: Enable the FIREWALLD service
       ansible.builtin.service:
@@ -48,11 +47,6 @@
         state: started
       when: add_remove == "present"
 
-    - name: REMOVE the FIREWALLD service package
-      ansible.builtin.dnf:
-        name: firewalld
-        state: "{{ add_remove }}"
-      when: ansible_facts['services']['firewalld.service'] is defined and add_remove == "absent"
 
     - name: Output Compliant compliance status
       ansible.builtin.debug:
